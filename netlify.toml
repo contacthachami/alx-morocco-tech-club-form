@@ -5,14 +5,24 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Netlify Forms Configuration
 [[forms]]
   name = "alx-volunteer-application"
-  
+
 [[redirects]]
   from = "/success"
   to = "/success.html"
   status = 200
 
-# Enable form spam filtering
+# Form settings with Power Automate integration
 [forms."alx-volunteer-application"]
   honeypot = "bot-field"
+  
+# Form notifications and webhooks
+[[forms."alx-volunteer-application".notification]]
+  type = "email"
+  event = "submission"
+  
+# Functions for serverless processing
+[functions]
+  directory = "netlify/functions"

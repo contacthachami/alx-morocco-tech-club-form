@@ -1,0 +1,18 @@
+[build]
+  publish = "."
+  command = "echo 'No build command needed for static site'"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[forms]]
+  name = "alx-volunteer-application"
+  
+[[redirects]]
+  from = "/success"
+  to = "/success.html"
+  status = 200
+
+# Enable form spam filtering
+[forms."alx-volunteer-application"]
+  honeypot = "bot-field"

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join ALX Morocco Tech Club - Volunteer Application</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="header">
+        <div class="header-content">
+          <div class="alx-logo-top">
+            <img src="images/ALX_White_1000px.png" alt="ALX" class="alx-logo" />
+          </div>
+
+          <div class="tech-club-card">
+            <img
+              src="images/#AI #OpenAI #Creative (1).png"
+              alt="Tech Club"
+              class="tech-club-img"
+            />
+          </div>
+
+          <h1 class="hero-title">Join the ALX Tech Club</h1>
+          <h2 class="hero-subtitle">as a Volunteer Member!</h2>
+
+          <div class="hero-description">
+            <p class="hero-text">
+              🚀 We're building a community of curious minds who love
+              technology.<br />
+              <strong
+                >Play an active role in shaping our future events and
+                activities.</strong
+              >
+            </p>
+          </div>
+
+          <div class="cta-box">
+            <p>
+              Fill out this form to become part of our team and let's build
+              something amazing together! 🔥
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Form Section -->
+      <section class="form-section">
+        <div class="form-container">
+          <form
+            id="volunteerForm"
+            name="alx-volunteer-application"
+            method="POST"
+            class="volunteer-form"
+            netlify
+            netlify-honeypot="bot-field"
+            action="/success"
+          >
+            <!-- Honeypot field for spam protection (hidden) -->
+            <input
+              type="text"
+              name="bot-field"
+              style="display: none"
+              tabindex="-1"
+              autocomplete="off"
+            />
+
+            <!-- Personal Information -->
+            <div class="form-group">
+              <label for="fullName" class="form-label">
+                <i class="fas fa-user"></i>
+                Full name <span class="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                class="form-input"
+                required
+              />
+              <div class="input-underline"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="age" class="form-label">
+                <i class="fas fa-calendar-alt"></i>
+                Age <span class="required">*</span>
+              </label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                class="form-input"
+                min="16"
+                max="100"
+                required
+              />
+              <div class="input-underline"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">
+                <i class="fas fa-envelope"></i>
+                Email <span class="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                required
+              />
+              <div class="input-underline"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="phoneNumber" class="form-label">
+                <i class="fas fa-phone"></i>
+                Phone number <span class="required">*</span>
+              </label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                class="form-input"
+                required
+              />
+              <div class="input-underline"></div>
+            </div>
+
+            <!-- ALX Information -->
+            <div class="section-divider">
+              <h3 class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                ALX Information
+              </h3>
+            </div>
+
+            <div class="form-group">
+              <label for="currentCohort" class="form-label">
+                <i class="fas fa-users"></i>
+                Current Cohort <span class="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="currentCohort"
+                name="currentCohort"
+                class="form-input"
+                placeholder="e.g., Cohort 12"
+                required
+              />
+              <div class="input-underline"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="currentProgram" class="form-label">
+                <i class="fas fa-code"></i>
+                Current program <span class="required">*</span>
+              </label>
+              <select
+                id="currentProgram"
+                name="currentProgram"
+                class="form-select"
+                required
+              >
+                <option value="">Select your program</option>
+                <option value="Software Engineering">
+                  Software Engineering
+                </option>
+                <option value="Full Stack Web Development">
+                  Full Stack Web Development
+                </option>
+                <option value="Data Science">Data Science</option>
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="DevOps">DevOps</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="input-underline"></div>
+            </div>
+
+            <!-- Hub Location -->
+            <div class="section-divider">
+              <h3 class="section-title">
+                <i class="fas fa-map-marker-alt"></i>
+                Location
+              </h3>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-location-dot"></i>
+                Which hub is close to you? <span class="required">*</span>
+              </label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="hubRabat"
+                    name="hubLocation"
+                    value="Hub Rabat"
+                    required
+                  />
+                  <label for="hubRabat" class="radio-label">
+                    <span class="radio-button"></span>
+                    Hub Rabat
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="hubCasablanca"
+                    name="hubLocation"
+                    value="Hub Casablanca - Technopark"
+                    required
+                  />
+                  <label for="hubCasablanca" class="radio-label">
+                    <span class="radio-button"></span>
+                    Hub Casablanca - Technopark
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Volunteer Role Application -->
+            <div class="section-divider">
+              <h3 class="section-title">
+                <i class="fas fa-handshake"></i>
+                Volunteer Application
+              </h3>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-briefcase"></i>
+                Applying for: <span class="required">*</span>
+              </label>
+              <div class="role-grid">
+                <div class="role-option">
+                  <input
+                    type="radio"
+                    id="graphicDesigner"
+                    name="volunteerRole"
+                    value="Graphic Designer"
+                    required
+                  />
+                  <label for="graphicDesigner" class="role-label">
+                    <i class="fas fa-palette"></i>
+                    <span>Graphic Designer</span>
+                    <small>Design beautiful visuals & branding materials</small>
+                  </label>
+                </div>
+                <div class="role-option">
+                  <input
+                    type="radio"
+                    id="eventCoordinator"
+                    name="volunteerRole"
+                    value="Event Coordinator"
+                    required
+                  />
+                  <label for="eventCoordinator" class="role-label">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Event Coordinator</span>
+                    <small>Organize amazing tech events & workshops</small>
+                  </label>
+                </div>
+                <div class="role-option">
+                  <input
+                    type="radio"
+                    id="communityModerator"
+                    name="volunteerRole"
+                    value="Community Moderator"
+                    required
+                  />
+                  <label for="communityModerator" class="role-label">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Community Moderator</span>
+                    <small>Build & nurture our tech community</small>
+                  </label>
+                </div>
+                <div class="role-option">
+                  <input
+                    type="radio"
+                    id="speakerRelations"
+                    name="volunteerRole"
+                    value="Speaker Relations Coordinator"
+                    required
+                  />
+                  <label for="speakerRelations" class="role-label">
+                    <i class="fas fa-microphone"></i>
+                    <span>Speaker Relations Coordinator</span>
+                    <small>Connect with industry leaders & speakers</small>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Commitment -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-clock"></i>
+                How much time you can give for volunteer work per week?
+                <span class="required">*</span>
+              </label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="time2-4"
+                    name="timeCommitment"
+                    value="2-4 hours/week"
+                    required
+                  />
+                  <label for="time2-4" class="radio-label">
+                    <span class="radio-button"></span>
+                    2-4 hours/week
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="time4-6"
+                    name="timeCommitment"
+                    value="4-6 hours/week"
+                    required
+                  />
+                  <label for="time4-6" class="radio-label">
+                    <span class="radio-button"></span>
+                    4-6 hours/week
+                  </label>
+                </div>
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="time6-8"
+                    name="timeCommitment"
+                    value="6-8 hours/week"
+                    required
+                  />
+                  <label for="time6-8" class="radio-label">
+                    <span class="radio-button"></span>
+                    6-8 hours/week
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Motivation -->
+            <div class="section-divider">
+              <h3 class="section-title">
+                <i class="fas fa-heart"></i>
+                Tell us about yourself
+              </h3>
+            </div>
+
+            <div class="form-group">
+              <label for="motivation" class="form-label">
+                <i class="fas fa-question-circle"></i>
+                Why do you want to become a volunteer member?
+                <span class="required">*</span>
+              </label>
+              <textarea
+                id="motivation"
+                name="motivation"
+                class="form-textarea"
+                rows="4"
+                placeholder="Share your passion and what drives you to join our community..."
+                required
+              ></textarea>
+              <div class="input-underline"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="experience" class="form-label">
+                <i class="fas fa-star"></i>
+                Do you have previous experience in volunteering? If yes, tell us
+                about it!
+              </label>
+              <textarea
+                id="experience"
+                name="experience"
+                class="form-textarea"
+                rows="3"
+                placeholder="Tell us about your volunteer experience, skills, or any relevant background..."
+              ></textarea>
+              <div class="input-underline"></div>
+            </div>
+
+            <!-- Resource Links -->
+            <div class="form-group">
+              <label for="resourceLink" class="form-label">
+                <i class="fas fa-link"></i>
+                Resource Link
+              </label>
+              <input
+                type="url"
+                id="resourceLink"
+                name="resourceLink"
+                class="form-input"
+                placeholder="Portfolio, LinkedIn, GitHub, or any relevant link..."
+              />
+              <div class="input-underline"></div>
+              <small class="form-help"
+                >Optional: Share your portfolio, LinkedIn profile, or any
+                relevant links</small
+              >
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+              <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-paper-plane"></i>
+                <span>Join Our Amazing Team</span>
+                <div class="btn-loader"></div>
+              </button>
+              <p class="submit-note">
+                🎉 By submitting this form, you're taking the first step towards
+                an amazing journey with ALX Morocco Tech Club!
+              </p>
+            </div>
+          </form>
+
+          <!-- Success Message -->
+          <div
+            id="successMessage"
+            class="success-message"
+            style="display: none"
+          >
+            <div class="success-content">
+              <i class="fas fa-check-circle"></i>
+              <h3>Application Submitted Successfully! 🎉</h3>
+              <p>
+                Welcome to the ALX Morocco Tech Club family! We've received your
+                application and our team will review it shortly.
+              </p>
+              <p>
+                <strong>What's next?</strong><br />
+                • You'll receive a confirmation email within 24 hours<br />
+                • Our team will contact you for the next steps<br />
+                • Join our community WhatsApp group (link will be shared via
+                email)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img
+              src="images/logo_black.png"
+              alt="ALX Logo"
+              class="footer-logo-img"
+            />
+          </div>
+          <p class="footer-text">
+            <strong>ALX Morocco Tech Club</strong> - Where Innovation Meets
+            Opportunity
+          </p>
+          <div class="footer-tags">
+            <span class="tag">#ALXTechClub</span>
+            <span class="tag">#ALXMorocco</span>
+            <span class="tag">#BuildTogether</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

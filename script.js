@@ -1,7 +1,8 @@
 // ALX Morocco Tech Club - Form JavaScript Functionality
 
 // ========== GOOGLE APPS SCRIPT WEB APP URL ==========
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfcoBVAxu2mawv0UC9mKD2bhkOUZZxd4Cw6OVZGXZJOC4YQEOdX9NWCL2IKhQCl1GOIw/exec";
+const GOOGLE_APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwfcoBVAxu2mawv0UC9mKD2bhkOUZZxd4Cw6OVZGXZJOC4YQEOdX9NWCL2IKhQCl1GOIw/exec";
 // =====================================================
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -401,12 +402,18 @@ document.addEventListener("DOMContentLoaded", function () {
         phoneNumber: document.getElementById("phoneNumber").value,
         currentCohort: document.getElementById("currentCohort").value,
         currentProgram: document.getElementById("currentProgram").value,
-        hubLocation: document.querySelector('input[name="hubLocation"]:checked')?.value || "",
-        volunteerRole: document.querySelector('input[name="volunteerRole"]:checked')?.value || "",
-        timeCommitment: document.querySelector('input[name="timeCommitment"]:checked')?.value || "",
+        hubLocation:
+          document.querySelector('input[name="hubLocation"]:checked')?.value ||
+          "",
+        volunteerRole:
+          document.querySelector('input[name="volunteerRole"]:checked')
+            ?.value || "",
+        timeCommitment:
+          document.querySelector('input[name="timeCommitment"]:checked')
+            ?.value || "",
         motivation: document.getElementById("motivation").value,
         experience: document.getElementById("experience").value,
-        resourceLink: document.getElementById("resourceLink").value
+        resourceLink: document.getElementById("resourceLink").value,
       };
 
       console.log("Submitting form data:", formData);
@@ -416,9 +423,9 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         mode: "no-cors", // Required for Google Apps Script
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       console.log("Form data sent to Google Sheets!");
@@ -432,7 +439,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Optional: Also send to Excel Online or other services
       // await sendToExcel(formData);
-
     } catch (error) {
       console.error("Form submission error:", error);
       showNotification(

@@ -1,54 +1,190 @@
 // ========== CONFIGURATION ==========
 const SHEET_ID = "1DyDhpc5yoIe2sTULdVaiy8A2cderoor4sngKYQ3Se6c";
 const SHEET_NAME = "Feuille 1";
+const LOGS_SHEET_NAME = "Logs";
 // ===================================
+
+// ========== LOGGING INFRASTRUCTURE ==========
+
+/**
+ * Ensure Logs sheet exists, create if missing
+ */
+function ensureLogsSheet() {
+  try {
+    var ss = SpreadsheetApp.openById(SHEET_ID);
+    var logsSheet = ss.getSheetByName(LOGS_SHEET_NAME);
+
+    if (!logsSheet) {
+      // Create new Logs sheet
+      logsSheet = ss.insertSheet(LOGS_SHEET_NAME);
+
+      // Add headers
+      logsSheet.appendRow(["Timestamp", "Level", "Message", "Details"]);
+
+      // Format headers
+      var headerRange = logsSheet.getRange("A1:D1");
+      headerRange.setFontWeight("bold");
+      headerRange.setBackground("#4285f4");
+      headerRange.setFontColor("#ffffff");
+
+      // Set column widths
+      logsSheet.setColumnWidth(1, 180); // Timestamp
+      logsSheet.setColumnWidth(2, 100); // Level
+      logsSheet.setColumnWidth(3, 300); // Message
+      logsSheet.setColumnWidth(4, 400); // Details
+
+      // Freeze header row
+      logsSheet.setFrozenRows(1);
+    }
+
+    return logsSheet;
+  } catch (err) {
+    // Silently fail - don't break form submission if logging fails
+    console.log("Warning: Could not create logs sheet: " + err.message);
+    return null;
+  }
+}
+
+/**
+ * Write log entry to Logs sheet
+ */
+function logToSheet(level, message, details) {
+  try {
+    var logsSheet = ensureLogsSheet();
+    if (!logsSheet) return; // Logging disabled if sheet can't be created
+
+    var timestamp = new Date();
+    var detailsStr = "";
+
+    // Convert details object to JSON string
+    if (details) {
+      try {
+        detailsStr = typeof details === 'object'
+          ? JSON.stringify(details)
+          : String(details);
+      } catch (e) {
+        detailsStr = String(details);
+      }
+    }
+
+    // Add emoji prefix based on level
+    var levelWithEmoji = level;
+    switch(level) {
+      case "SUCCESS":
+        levelWithEmoji = "✅ " + level;
+        break;
+      case "ERROR":
+        levelWithEmoji = "❌ " + level;
+        break;
+      case "WARNING":
+        levelWithEmoji = "⚠️ " + level;
+        break;
+      case "INFO":
+        levelWithEmoji = "ℹ️ " + level;
+        break;
+    }
+
+    // Append log row
+    logsSheet.appendRow([timestamp, levelWithEmoji, message, detailsStr]);
+
+    // Optional: Keep only last 1000 log entries to prevent sheet bloat
+    var lastRow = logsSheet.getLastRow();
+    if (lastRow > 1001) { // 1000 logs + 1 header
+      logsSheet.deleteRows(2, lastRow - 1001);
+    }
+
+  } catch (err) {
+    // Silently fail - don't break form submission if logging fails
+    console.log("Warning: Could not write to logs sheet: " + err.message);
+  }
+}
+
+/**
+ * Dual logging - writes to both console and sheet
+ */
+function log(level, message, details) {
+  // Console logging (backup for when Cloud Logs work)
+  var emoji = "";
+  switch(level) {
+    case "SUCCESS": emoji = "✅"; break;
+    case "ERROR": emoji = "❌"; break;
+    case "WARNING": emoji = "⚠️"; break;
+    case "INFO": emoji = "ℹ️"; break;
+  }
+
+  var consoleMsg = emoji + " " + message;
+  if (details) {
+    console.log(consoleMsg, details);
+  } else {
+    console.log(consoleMsg);
+  }
+
+  // Sheet logging (persistent and always visible)
+  logToSheet(level, message, details);
+}
+
+// ========================================
 
 /**
  * doPost - Receives form submissions from your website
  */
 function doPost(e) {
   try {
-    console.log("========================================");
-    console.log("📥 NEW FORM SUBMISSION RECEIVED");
-    console.log("Timestamp: " + new Date().toISOString());
-    console.log("========================================");
+    log("INFO", "========================================");
+    log("INFO", "NEW FORM SUBMISSION RECEIVED", {
+      timestamp: new Date().toISOString(),
+      contentType: e.postData ? e.postData.type : "undefined"
+    });
+    log("INFO", "========================================");
 
     // Parse the incoming payload
     var payload = parsePayload(e);
-    console.log("✅ Payload parsed successfully");
-    console.log("Payload fields: " + Object.keys(payload).join(", "));
+    log("SUCCESS", "Payload parsed successfully", {
+      fieldCount: Object.keys(payload).length,
+      fields: Object.keys(payload).join(", ")
+    });
 
     // Validate required fields
     var errors = validatePayload(payload);
     if (errors.length > 0) {
-      console.log("❌ VALIDATION FAILED");
-      console.log("Validation errors: " + errors.join(", "));
+      log("ERROR", "VALIDATION FAILED", {
+        errorCount: errors.length,
+        errors: errors
+      });
       return jsonResponse({ status: "error", errors: errors }, 400);
     }
-    console.log("✅ Validation passed");
+    log("SUCCESS", "Validation passed");
 
     // Normalize and sanitize data
     payload = normalizePayload(payload);
-    console.log("✅ Data normalized");
+    log("SUCCESS", "Data normalized", {
+      submissionId: payload.submissionId
+    });
 
     // Append to Google Sheet
-    console.log("📊 Attempting to append to Google Sheet...");
+    log("INFO", "Attempting to append to Google Sheet...");
     appendToSheet(payload);
 
-    console.log("========================================");
-    console.log("✅ SUCCESS - Data saved to Google Sheet");
-    console.log("Submission ID: " + payload.submissionId);
-    console.log("========================================");
+    log("INFO", "========================================");
+    log("SUCCESS", "Data saved to Google Sheet", {
+      submissionId: payload.submissionId,
+      email: payload.email,
+      role: payload.volunteerRole
+    });
+    log("INFO", "========================================");
+
     return jsonResponse(
       { status: "success", message: "Application submitted successfully!" },
       200
     );
   } catch (err) {
-    console.log("========================================");
-    console.log("❌ ERROR IN doPost");
-    console.log("Error message: " + err.message);
-    console.log("Error stack: " + (err.stack || "No stack trace"));
-    console.log("========================================");
+    log("INFO", "========================================");
+    log("ERROR", "ERROR IN doPost", {
+      message: err.message,
+      stack: err.stack || "No stack trace"
+    });
+    log("INFO", "========================================");
+
     return jsonResponse(
       {
         status: "error",
@@ -75,38 +211,44 @@ function doGet(e) {
 function parsePayload(e) {
   try {
     // Log the raw event for debugging
-    console.log("=== PARSING PAYLOAD ===");
-    console.log("Content-Type: " + (e.postData ? e.postData.type : "undefined"));
-    console.log("Raw event parameter: " + JSON.stringify(e.parameter));
-    console.log(
-      "Raw postData: " + (e.postData ? JSON.stringify(e.postData) : "undefined")
-    );
+    log("INFO", "=== PARSING PAYLOAD ===");
+    log("INFO", "Request metadata", {
+      contentType: e.postData ? e.postData.type : "undefined",
+      hasParameter: !!e.parameter,
+      hasPostData: !!e.postData
+    });
 
     // Try to get raw data string first
     if (e.postData) {
       var rawData = e.postData.getDataAsString();
-      console.log("Raw data string: " + rawData);
-      console.log("Raw data length: " + rawData.length);
+      log("INFO", "Received POST data", {
+        dataLength: rawData.length
+      });
 
       // Try parsing as JSON (works for both text/plain and application/json)
       if (rawData && rawData.length > 0) {
         try {
           const parsed = JSON.parse(rawData);
-          console.log("✅ Successfully parsed as JSON");
-          console.log("Parsed payload: " + JSON.stringify(parsed));
+          log("SUCCESS", "Successfully parsed as JSON", {
+            method: "direct",
+            fieldCount: Object.keys(parsed).length
+          });
           return parsed;
         } catch (jsonError) {
-          console.log("⚠️ Not valid JSON: " + jsonError);
+          log("WARNING", "Not valid JSON, trying URL decode", {
+            error: jsonError.message
+          });
 
           // Try URL decoding first, then parse
           try {
             const decoded = decodeURIComponent(rawData);
-            console.log("URL decoded data: " + decoded);
             const parsed = JSON.parse(decoded);
-            console.log("✅ Successfully parsed after URL decode");
+            log("SUCCESS", "Successfully parsed after URL decode");
             return parsed;
           } catch (decodeError) {
-            console.log("⚠️ URL decode failed: " + decodeError);
+            log("WARNING", "URL decode failed", {
+              error: decodeError.message
+            });
           }
         }
       }
@@ -114,22 +256,26 @@ function parsePayload(e) {
 
     // Try postData.contents (legacy support)
     if (e.postData && e.postData.contents) {
-      console.log("Trying postData.contents");
+      log("INFO", "Trying postData.contents");
       const parsed = JSON.parse(e.postData.contents);
-      console.log("✅ Parsed from postData.contents");
+      log("SUCCESS", "Parsed from postData.contents");
       return parsed;
     }
 
     // Fall back to e.parameter (for test submissions and form-encoded data)
     if (e.parameter && Object.keys(e.parameter).length > 0) {
-      console.log("✅ Using e.parameter");
+      log("SUCCESS", "Using e.parameter", {
+        fieldCount: Object.keys(e.parameter).length
+      });
       return e.parameter;
     }
 
     throw new Error("No valid payload found in request");
   } catch (error) {
-    console.log("❌ Error in parsePayload: " + error);
-    console.log("Error stack: " + error.stack);
+    log("ERROR", "Error in parsePayload", {
+      message: error.message,
+      stack: error.stack
+    });
     throw error;
   }
 }
@@ -248,10 +394,16 @@ function appendToSheet(payload) {
     // Append the row
     sheet.appendRow(row);
 
-    console.log("Row appended successfully");
-    console.log("Data: " + JSON.stringify(row));
+    log("SUCCESS", "Row appended to sheet successfully", {
+      sheetName: SHEET_NAME,
+      submissionId: payload.submissionId,
+      rowNumber: sheet.getLastRow()
+    });
   } catch (err) {
-    console.log("Error appending to sheet: " + (err.stack || err));
+    log("ERROR", "Error appending to sheet", {
+      error: err.message,
+      stack: err.stack || "No stack trace"
+    });
     throw new Error("Failed to save data: " + err.message);
   }
 }
@@ -270,7 +422,7 @@ function jsonResponse(obj, statusCode) {
  * Test function - CORRECTED VERSION - Run this to test
  */
 function testSubmission() {
-  console.log("=== Starting test submission ===");
+  log("INFO", "=== Starting test submission ===");
 
   // Create test payload
   var testPayload = {
@@ -299,14 +451,17 @@ function testSubmission() {
   };
 
   try {
-    console.log("Calling doPost with test data...");
+    log("INFO", "Calling doPost with test data...");
     var result = doPost(simulatedEvent);
-    console.log("✅ Test result: " + result.getContent());
-    console.log("✅ Test completed! Check your Google Sheet for the new row.");
+    log("SUCCESS", "Test completed! Check your Google Sheet for the new row.", {
+      result: result.getContent()
+    });
     return result;
   } catch (err) {
-    console.log("❌ Test failed with error: " + err);
-    console.log("Error stack: " + err.stack);
+    log("ERROR", "Test failed", {
+      error: err.message,
+      stack: err.stack
+    });
     throw err;
   }
 }
@@ -319,7 +474,7 @@ function testDirectInsert() {
     var sheet = ss.getSheetByName(SHEET_NAME);
 
     if (!sheet) {
-      console.log("Sheet not found: " + SHEET_NAME);
+      log("ERROR", "Sheet not found: " + SHEET_NAME);
       return;
     }
 
@@ -341,8 +496,12 @@ function testDirectInsert() {
     ];
 
     sheet.appendRow(testData);
-    console.log("✅ Direct insert successful! Check your sheet.");
+    log("SUCCESS", "Direct insert successful! Check your sheet.", {
+      rowNumber: sheet.getLastRow()
+    });
   } catch (err) {
-    console.log("❌ Direct insert failed: " + err);
+    log("ERROR", "Direct insert failed", {
+      error: err.message
+    });
   }
 }

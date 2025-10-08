@@ -1,5 +1,9 @@
 // ALX Morocco Tech Club - Form JavaScript Functionality
 
+// ========== GOOGLE APPS SCRIPT WEB APP URL ==========
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfcoBVAxu2mawv0UC9mKD2bhkOUZZxd4Cw6OVZGXZJOC4YQEOdX9NWCL2IKhQCl1GOIw/exec";
+// =====================================================
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("volunteerForm");
   const submitBtn = document.getElementById("submitBtn");
@@ -389,40 +393,48 @@ document.addEventListener("DOMContentLoaded", function () {
     setLoadingState(true);
 
     try {
-      // Prepare form data
-      const formData = new FormData(form);
+      // Prepare form data as JSON object for Google Sheets
+      const formData = {
+        fullName: document.getElementById("fullName").value,
+        age: document.getElementById("age").value,
+        email: document.getElementById("email").value,
+        phoneNumber: document.getElementById("phoneNumber").value,
+        currentCohort: document.getElementById("currentCohort").value,
+        currentProgram: document.getElementById("currentProgram").value,
+        hubLocation: document.querySelector('input[name="hubLocation"]:checked')?.value || "",
+        volunteerRole: document.querySelector('input[name="volunteerRole"]:checked')?.value || "",
+        timeCommitment: document.querySelector('input[name="timeCommitment"]:checked')?.value || "",
+        motivation: document.getElementById("motivation").value,
+        experience: document.getElementById("experience").value,
+        resourceLink: document.getElementById("resourceLink").value
+      };
 
-      // Add metadata for better organization
-      formData.append("_subject", "New ALX Tech Club Volunteer Application");
-      formData.append("_template", "table");
-      formData.append("_format", "plain");
-      formData.append("_timestamp", new Date().toISOString());
+      console.log("Submitting form data:", formData);
 
-      // Submit to Submit.json (FREE unlimited submissions)
-      const response = await fetch(form.action, {
+      // Submit to Google Apps Script
+      const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
         method: "POST",
-        body: formData,
+        mode: "no-cors", // Important for Google Apps Script
         headers: {
-          Accept: "application/json",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify(formData)
       });
 
-      if (response.ok) {
-        // Show success message
-        showSuccessMessage();
+      // Note: With no-cors mode, we can't read the response
+      // But if we reach here without error, submission was successful
+      console.log("Form submitted successfully to Google Sheets!");
 
-        // Reset form
-        form.reset();
-        updateProgress();
+      // Show success message
+      showSuccessMessage();
 
-        // Track successful submission
-        console.log("Form submitted successfully");
+      // Reset form
+      form.reset();
+      updateProgress();
 
-        // Optional: Send to Google Sheets or Excel Online
-        await sendToExcel(formData);
-      } else {
-        throw new Error("Form submission failed");
-      }
+      // Optional: Also send to Excel Online or other services
+      // await sendToExcel(formData);
+
     } catch (error) {
       console.error("Form submission error:", error);
       showNotification(
@@ -431,43 +443,6 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     } finally {
       setLoadingState(false);
-    }
-  }
-
-  async function sendToExcel(formData) {
-    // This function can be used to send data to Excel Online via Microsoft Graph API
-    // or other Excel integration services. For now, we'll use a webhook approach.
-
-    try {
-      const data = {};
-      for (let [key, value] of formData.entries()) {
-        if (!key.startsWith("_")) {
-          // Skip Formspree metadata
-          data[key] = value;
-        }
-      }
-
-      // Add timestamp
-      data.submissionDate = new Date().toISOString();
-      data.timestamp = new Date().toLocaleString();
-
-      // You can integrate with services like:
-      // - Microsoft Power Automate (Flow)
-      // - Zapier
-      // - Google Sheets API
-      // - Excel Online API
-
-      console.log("Data prepared for Excel:", data);
-
-      // Example webhook call (replace with your actual endpoint)
-      // await fetch('YOUR_WEBHOOK_URL', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify(data)
-      // });
-    } catch (error) {
-      console.error("Excel integration error:", error);
-      // Don't show error to user as the main form submission succeeded
     }
   }
 

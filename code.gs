@@ -59,9 +59,10 @@ function logToSheet(level, message, details) {
     // Convert details object to JSON string
     if (details) {
       try {
-        detailsStr = typeof details === 'object'
-          ? JSON.stringify(details)
-          : String(details);
+        detailsStr =
+          typeof details === "object"
+            ? JSON.stringify(details)
+            : String(details);
       } catch (e) {
         detailsStr = String(details);
       }
@@ -69,7 +70,7 @@ function logToSheet(level, message, details) {
 
     // Add emoji prefix based on level
     var levelWithEmoji = level;
-    switch(level) {
+    switch (level) {
       case "SUCCESS":
         levelWithEmoji = "✅ " + level;
         break;
@@ -89,10 +90,10 @@ function logToSheet(level, message, details) {
 
     // Optional: Keep only last 1000 log entries to prevent sheet bloat
     var lastRow = logsSheet.getLastRow();
-    if (lastRow > 1001) { // 1000 logs + 1 header
+    if (lastRow > 1001) {
+      // 1000 logs + 1 header
       logsSheet.deleteRows(2, lastRow - 1001);
     }
-
   } catch (err) {
     // Silently fail - don't break form submission if logging fails
     console.log("Warning: Could not write to logs sheet: " + err.message);
@@ -105,11 +106,19 @@ function logToSheet(level, message, details) {
 function log(level, message, details) {
   // Console logging (backup for when Cloud Logs work)
   var emoji = "";
-  switch(level) {
-    case "SUCCESS": emoji = "✅"; break;
-    case "ERROR": emoji = "❌"; break;
-    case "WARNING": emoji = "⚠️"; break;
-    case "INFO": emoji = "ℹ️"; break;
+  switch (level) {
+    case "SUCCESS":
+      emoji = "✅";
+      break;
+    case "ERROR":
+      emoji = "❌";
+      break;
+    case "WARNING":
+      emoji = "⚠️";
+      break;
+    case "INFO":
+      emoji = "ℹ️";
+      break;
   }
 
   var consoleMsg = emoji + " " + message;
@@ -133,7 +142,7 @@ function doPost(e) {
     log("INFO", "========================================");
     log("INFO", "NEW FORM SUBMISSION RECEIVED", {
       timestamp: new Date().toISOString(),
-      contentType: e.postData ? e.postData.type : "undefined"
+      contentType: e.postData ? e.postData.type : "undefined",
     });
     log("INFO", "========================================");
 
@@ -141,7 +150,7 @@ function doPost(e) {
     var payload = parsePayload(e);
     log("SUCCESS", "Payload parsed successfully", {
       fieldCount: Object.keys(payload).length,
-      fields: Object.keys(payload).join(", ")
+      fields: Object.keys(payload).join(", "),
     });
 
     // Validate required fields
@@ -149,7 +158,7 @@ function doPost(e) {
     if (errors.length > 0) {
       log("ERROR", "VALIDATION FAILED", {
         errorCount: errors.length,
-        errors: errors
+        errors: errors,
       });
       return jsonResponse({ status: "error", errors: errors }, 400);
     }
@@ -158,7 +167,7 @@ function doPost(e) {
     // Normalize and sanitize data
     payload = normalizePayload(payload);
     log("SUCCESS", "Data normalized", {
-      submissionId: payload.submissionId
+      submissionId: payload.submissionId,
     });
 
     // Append to Google Sheet
@@ -169,7 +178,7 @@ function doPost(e) {
     log("SUCCESS", "Data saved to Google Sheet", {
       submissionId: payload.submissionId,
       email: payload.email,
-      role: payload.volunteerRole
+      role: payload.volunteerRole,
     });
     log("INFO", "========================================");
 
@@ -181,7 +190,7 @@ function doPost(e) {
     log("INFO", "========================================");
     log("ERROR", "ERROR IN doPost", {
       message: err.message,
-      stack: err.stack || "No stack trace"
+      stack: err.stack || "No stack trace",
     });
     log("INFO", "========================================");
 
@@ -215,14 +224,14 @@ function parsePayload(e) {
     log("INFO", "Request metadata", {
       contentType: e.postData ? e.postData.type : "undefined",
       hasParameter: !!e.parameter,
-      hasPostData: !!e.postData
+      hasPostData: !!e.postData,
     });
 
     // Try to get raw data string first
     if (e.postData) {
       var rawData = e.postData.getDataAsString();
       log("INFO", "Received POST data", {
-        dataLength: rawData.length
+        dataLength: rawData.length,
       });
 
       // Try parsing as JSON (works for both text/plain and application/json)
@@ -231,12 +240,12 @@ function parsePayload(e) {
           const parsed = JSON.parse(rawData);
           log("SUCCESS", "Successfully parsed as JSON", {
             method: "direct",
-            fieldCount: Object.keys(parsed).length
+            fieldCount: Object.keys(parsed).length,
           });
           return parsed;
         } catch (jsonError) {
           log("WARNING", "Not valid JSON, trying URL decode", {
-            error: jsonError.message
+            error: jsonError.message,
           });
 
           // Try URL decoding first, then parse
@@ -247,7 +256,7 @@ function parsePayload(e) {
             return parsed;
           } catch (decodeError) {
             log("WARNING", "URL decode failed", {
-              error: decodeError.message
+              error: decodeError.message,
             });
           }
         }
@@ -265,7 +274,7 @@ function parsePayload(e) {
     // Fall back to e.parameter (for test submissions and form-encoded data)
     if (e.parameter && Object.keys(e.parameter).length > 0) {
       log("SUCCESS", "Using e.parameter", {
-        fieldCount: Object.keys(e.parameter).length
+        fieldCount: Object.keys(e.parameter).length,
       });
       return e.parameter;
     }
@@ -274,7 +283,7 @@ function parsePayload(e) {
   } catch (error) {
     log("ERROR", "Error in parsePayload", {
       message: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
     throw error;
   }
@@ -397,12 +406,12 @@ function appendToSheet(payload) {
     log("SUCCESS", "Row appended to sheet successfully", {
       sheetName: SHEET_NAME,
       submissionId: payload.submissionId,
-      rowNumber: sheet.getLastRow()
+      rowNumber: sheet.getLastRow(),
     });
   } catch (err) {
     log("ERROR", "Error appending to sheet", {
       error: err.message,
-      stack: err.stack || "No stack trace"
+      stack: err.stack || "No stack trace",
     });
     throw new Error("Failed to save data: " + err.message);
   }
@@ -442,25 +451,22 @@ function testSubmission() {
   };
 
   // Simulate the event object that comes from a real POST request
+  // Using e.parameter approach (simpler and works with fallback logic)
   var simulatedEvent = {
     parameter: testPayload, // This simulates form data
-    postData: {
-      type: "text/plain;charset=utf-8",
-      contents: JSON.stringify(testPayload),
-    },
   };
 
   try {
     log("INFO", "Calling doPost with test data...");
     var result = doPost(simulatedEvent);
     log("SUCCESS", "Test completed! Check your Google Sheet for the new row.", {
-      result: result.getContent()
+      result: result.getContent(),
     });
     return result;
   } catch (err) {
     log("ERROR", "Test failed", {
       error: err.message,
-      stack: err.stack
+      stack: err.stack,
     });
     throw err;
   }
@@ -497,11 +503,11 @@ function testDirectInsert() {
 
     sheet.appendRow(testData);
     log("SUCCESS", "Direct insert successful! Check your sheet.", {
-      rowNumber: sheet.getLastRow()
+      rowNumber: sheet.getLastRow(),
     });
   } catch (err) {
     log("ERROR", "Direct insert failed", {
-      error: err.message
+      error: err.message,
     });
   }
 }

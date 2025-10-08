@@ -423,7 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         mode: "no-cors", // Required for Google Apps Script
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "text/plain", // Use text/plain for no-cors JSON
         },
         body: JSON.stringify(formData),
       });

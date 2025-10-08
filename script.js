@@ -435,50 +435,39 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function sendToExcel(formData) {
-    // Send data to Excel Online via Power Automate using Netlify serverless function
-    
+    // This function can be used to send data to Excel Online via Microsoft Graph API
+    // or other Excel integration services. For now, we'll use a webhook approach.
+
     try {
       const data = {};
       for (let [key, value] of formData.entries()) {
         if (!key.startsWith("_")) {
-          // Skip metadata fields
+          // Skip Formspree metadata
           data[key] = value;
         }
       }
 
-      // Add timestamp and metadata
+      // Add timestamp
       data.submissionDate = new Date().toISOString();
       data.timestamp = new Date().toLocaleString();
-      data.source = 'ALX Morocco Tech Club Form';
 
-      console.log("Sending data to Excel via Power Automate:", data);
+      // You can integrate with services like:
+      // - Microsoft Power Automate (Flow)
+      // - Zapier
+      // - Google Sheets API
+      // - Excel Online API
 
-      // Send to Netlify serverless function which forwards to Power Automate
-      const response = await fetch('/.netlify/functions/submit-to-excel', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
+      console.log("Data prepared for Excel:", data);
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        console.log("✅ Data successfully sent to Excel:", result.message);
-        
-        // Show additional success notification for Excel integration
-        showNotification("Form submitted and data saved to Excel Online! 📊", "success");
-      } else {
-        console.warn("Excel integration issue:", result.error || 'Unknown error');
-        // Don't show error to user as the main form submission succeeded
-        // The form still works with Netlify, Excel is a bonus feature
-      }
-
+      // Example webhook call (replace with your actual endpoint)
+      // await fetch('YOUR_WEBHOOK_URL', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify(data)
+      // });
     } catch (error) {
       console.error("Excel integration error:", error);
       // Don't show error to user as the main form submission succeeded
-      // The form still works with Netlify, Excel integration is additional
     }
   }
 
@@ -538,31 +527,21 @@ document.addEventListener("DOMContentLoaded", function () {
   function showNotification(message, type = "info") {
     const notification = document.createElement("div");
     notification.className = `notification notification-${type}`;
-    
-    // Choose appropriate icon based on type
-    let iconClass = "info-circle";
-    if (type === "error") iconClass = "exclamation-circle";
-    else if (type === "success") iconClass = "check-circle";
-    else if (type === "warning") iconClass = "exclamation-triangle";
-    
     notification.innerHTML = `
-            <i class="fas fa-${iconClass}"></i>
+            <i class="fas fa-${
+              type === "error" ? "exclamation-circle" : "info-circle"
+            }"></i>
             <span>${message}</span>
             <button class="notification-close" onclick="this.parentElement.remove()">
                 <i class="fas fa-times"></i>
             </button>
         `;
 
-    // Add styles with improved colors
-    let backgroundColor = "#3b82f6"; // Default blue
-    if (type === "error") backgroundColor = "#ef4444";
-    else if (type === "success") backgroundColor = "#10b981";
-    else if (type === "warning") backgroundColor = "#f59e0b";
-    
+    // Add styles
     notification.style.position = "fixed";
     notification.style.top = "20px";
     notification.style.right = "20px";
-    notification.style.background = backgroundColor;
+    notification.style.background = type === "error" ? "#ef4444" : "#3b82f6";
     notification.style.color = "white";
     notification.style.padding = "1rem 1.5rem";
     notification.style.borderRadius = "8px";
@@ -573,12 +552,10 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.style.gap = "0.5rem";
     notification.style.maxWidth = "400px";
     notification.style.animation = "slideInRight 0.3s ease-out";
-    notification.style.fontWeight = "500";
 
     document.body.appendChild(notification);
 
-    // Auto remove after 6 seconds for success messages, 5 for others
-    const timeout = type === "success" ? 6000 : 5000;
+    // Auto remove after 5 seconds
     setTimeout(() => {
       if (notification.parentNode) {
         notification.style.animation = "slideOutRight 0.3s ease-out";
@@ -588,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }, 300);
       }
-    }, timeout);
+    }, 5000);
   }
 
   // Add CSS animations

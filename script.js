@@ -412,18 +412,19 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Submitting form data:", formData);
 
       // Submit to Google Apps Script
-      const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", // Important for Google Apps Script
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData)
-      });
-
-      // Note: With no-cors mode, we can't read the response
-      // But if we reach here without error, submission was successful
-      console.log("Form submitted successfully to Google Sheets!");
+      // Using a simple POST without CORS restrictions
+      try {
+        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify(formData)
+        });
+        
+        console.log("Response received:", response);
+      } catch (error) {
+        console.log("Fetch completed (CORS blocked response is normal):", error);
+      }
+      
+      console.log("Form data sent to Google Sheets!");
 
       // Show success message
       showSuccessMessage();

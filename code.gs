@@ -8,47 +8,47 @@ const SHEET_NAME = "Feuille 1";
  */
 function doPost(e) {
   try {
-    Logger.log("========================================");
-    Logger.log("📥 NEW FORM SUBMISSION RECEIVED");
-    Logger.log("Timestamp: " + new Date().toISOString());
-    Logger.log("========================================");
+    console.log("========================================");
+    console.log("📥 NEW FORM SUBMISSION RECEIVED");
+    console.log("Timestamp: " + new Date().toISOString());
+    console.log("========================================");
 
     // Parse the incoming payload
     var payload = parsePayload(e);
-    Logger.log("✅ Payload parsed successfully");
-    Logger.log("Payload fields: " + Object.keys(payload).join(", "));
+    console.log("✅ Payload parsed successfully");
+    console.log("Payload fields: " + Object.keys(payload).join(", "));
 
     // Validate required fields
     var errors = validatePayload(payload);
     if (errors.length > 0) {
-      Logger.log("❌ VALIDATION FAILED");
-      Logger.log("Validation errors: " + errors.join(", "));
+      console.log("❌ VALIDATION FAILED");
+      console.log("Validation errors: " + errors.join(", "));
       return jsonResponse({ status: "error", errors: errors }, 400);
     }
-    Logger.log("✅ Validation passed");
+    console.log("✅ Validation passed");
 
     // Normalize and sanitize data
     payload = normalizePayload(payload);
-    Logger.log("✅ Data normalized");
+    console.log("✅ Data normalized");
 
     // Append to Google Sheet
-    Logger.log("📊 Attempting to append to Google Sheet...");
+    console.log("📊 Attempting to append to Google Sheet...");
     appendToSheet(payload);
 
-    Logger.log("========================================");
-    Logger.log("✅ SUCCESS - Data saved to Google Sheet");
-    Logger.log("Submission ID: " + payload.submissionId);
-    Logger.log("========================================");
+    console.log("========================================");
+    console.log("✅ SUCCESS - Data saved to Google Sheet");
+    console.log("Submission ID: " + payload.submissionId);
+    console.log("========================================");
     return jsonResponse(
       { status: "success", message: "Application submitted successfully!" },
       200
     );
   } catch (err) {
-    Logger.log("========================================");
-    Logger.log("❌ ERROR IN doPost");
-    Logger.log("Error message: " + err.message);
-    Logger.log("Error stack: " + (err.stack || "No stack trace"));
-    Logger.log("========================================");
+    console.log("========================================");
+    console.log("❌ ERROR IN doPost");
+    console.log("Error message: " + err.message);
+    console.log("Error stack: " + (err.stack || "No stack trace"));
+    console.log("========================================");
     return jsonResponse(
       {
         status: "error",
@@ -75,38 +75,38 @@ function doGet(e) {
 function parsePayload(e) {
   try {
     // Log the raw event for debugging
-    Logger.log("=== PARSING PAYLOAD ===");
-    Logger.log("Content-Type: " + (e.postData ? e.postData.type : "undefined"));
-    Logger.log("Raw event parameter: " + JSON.stringify(e.parameter));
-    Logger.log(
+    console.log("=== PARSING PAYLOAD ===");
+    console.log("Content-Type: " + (e.postData ? e.postData.type : "undefined"));
+    console.log("Raw event parameter: " + JSON.stringify(e.parameter));
+    console.log(
       "Raw postData: " + (e.postData ? JSON.stringify(e.postData) : "undefined")
     );
 
     // Try to get raw data string first
     if (e.postData) {
       var rawData = e.postData.getDataAsString();
-      Logger.log("Raw data string: " + rawData);
-      Logger.log("Raw data length: " + rawData.length);
+      console.log("Raw data string: " + rawData);
+      console.log("Raw data length: " + rawData.length);
 
       // Try parsing as JSON (works for both text/plain and application/json)
       if (rawData && rawData.length > 0) {
         try {
           const parsed = JSON.parse(rawData);
-          Logger.log("✅ Successfully parsed as JSON");
-          Logger.log("Parsed payload: " + JSON.stringify(parsed));
+          console.log("✅ Successfully parsed as JSON");
+          console.log("Parsed payload: " + JSON.stringify(parsed));
           return parsed;
         } catch (jsonError) {
-          Logger.log("⚠️ Not valid JSON: " + jsonError);
+          console.log("⚠️ Not valid JSON: " + jsonError);
 
           // Try URL decoding first, then parse
           try {
             const decoded = decodeURIComponent(rawData);
-            Logger.log("URL decoded data: " + decoded);
+            console.log("URL decoded data: " + decoded);
             const parsed = JSON.parse(decoded);
-            Logger.log("✅ Successfully parsed after URL decode");
+            console.log("✅ Successfully parsed after URL decode");
             return parsed;
           } catch (decodeError) {
-            Logger.log("⚠️ URL decode failed: " + decodeError);
+            console.log("⚠️ URL decode failed: " + decodeError);
           }
         }
       }
@@ -114,22 +114,22 @@ function parsePayload(e) {
 
     // Try postData.contents (legacy support)
     if (e.postData && e.postData.contents) {
-      Logger.log("Trying postData.contents");
+      console.log("Trying postData.contents");
       const parsed = JSON.parse(e.postData.contents);
-      Logger.log("✅ Parsed from postData.contents");
+      console.log("✅ Parsed from postData.contents");
       return parsed;
     }
 
     // Fall back to e.parameter (for test submissions and form-encoded data)
     if (e.parameter && Object.keys(e.parameter).length > 0) {
-      Logger.log("✅ Using e.parameter");
+      console.log("✅ Using e.parameter");
       return e.parameter;
     }
 
     throw new Error("No valid payload found in request");
   } catch (error) {
-    Logger.log("❌ Error in parsePayload: " + error);
-    Logger.log("Error stack: " + error.stack);
+    console.log("❌ Error in parsePayload: " + error);
+    console.log("Error stack: " + error.stack);
     throw error;
   }
 }
@@ -248,10 +248,10 @@ function appendToSheet(payload) {
     // Append the row
     sheet.appendRow(row);
 
-    Logger.log("Row appended successfully");
-    Logger.log("Data: " + JSON.stringify(row));
+    console.log("Row appended successfully");
+    console.log("Data: " + JSON.stringify(row));
   } catch (err) {
-    Logger.log("Error appending to sheet: " + (err.stack || err));
+    console.log("Error appending to sheet: " + (err.stack || err));
     throw new Error("Failed to save data: " + err.message);
   }
 }
@@ -270,7 +270,7 @@ function jsonResponse(obj, statusCode) {
  * Test function - CORRECTED VERSION - Run this to test
  */
 function testSubmission() {
-  Logger.log("=== Starting test submission ===");
+  console.log("=== Starting test submission ===");
 
   // Create test payload
   var testPayload = {
@@ -299,14 +299,14 @@ function testSubmission() {
   };
 
   try {
-    Logger.log("Calling doPost with test data...");
+    console.log("Calling doPost with test data...");
     var result = doPost(simulatedEvent);
-    Logger.log("✅ Test result: " + result.getContent());
-    Logger.log("✅ Test completed! Check your Google Sheet for the new row.");
+    console.log("✅ Test result: " + result.getContent());
+    console.log("✅ Test completed! Check your Google Sheet for the new row.");
     return result;
   } catch (err) {
-    Logger.log("❌ Test failed with error: " + err);
-    Logger.log("Error stack: " + err.stack);
+    console.log("❌ Test failed with error: " + err);
+    console.log("Error stack: " + err.stack);
     throw err;
   }
 }
@@ -319,7 +319,7 @@ function testDirectInsert() {
     var sheet = ss.getSheetByName(SHEET_NAME);
 
     if (!sheet) {
-      Logger.log("Sheet not found: " + SHEET_NAME);
+      console.log("Sheet not found: " + SHEET_NAME);
       return;
     }
 
@@ -341,8 +341,8 @@ function testDirectInsert() {
     ];
 
     sheet.appendRow(testData);
-    Logger.log("✅ Direct insert successful! Check your sheet.");
+    console.log("✅ Direct insert successful! Check your sheet.");
   } catch (err) {
-    Logger.log("❌ Direct insert failed: " + err);
+    console.log("❌ Direct insert failed: " + err);
   }
 }

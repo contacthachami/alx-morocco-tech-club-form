@@ -1,0 +1,888 @@
+/* ALX Morocco Tech Club - Volunteer Guide PDF Styles */
+
+:root {
+  --primary-purple: #6366f1;
+  --secondary-purple: #8b5cf6;
+  --light-purple: #a855f7;
+  --deep-purple: #4f46e5;
+  --text-dark: #1e293b;
+  --text-secondary: #64748b;
+  --bg-light: #f8fafc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: white;
+}
+
+/* Print Button */
+.print-button-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 30px rgba(99, 102, 241, 0.25);
+  border: 2px solid var(--primary-purple);
+}
+
+.print-btn,
+.finish-reading-btn {
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--secondary-purple)
+  );
+  color: white;
+  border: none;
+  padding: 15px 35px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.print-btn:hover,
+.finish-reading-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(
+    135deg,
+    var(--secondary-purple),
+    var(--light-purple)
+  );
+}
+
+.print-btn:active,
+.finish-reading-btn:active {
+  transform: translateY(-1px);
+}
+
+.print-btn:disabled,
+.finish-reading-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.print-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Page Layout */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20mm;
+  page-break-after: always;
+  position: relative;
+}
+
+/* Cover Page */
+.cover-page {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-gradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple) 0%,
+    var(--secondary-purple) 50%,
+    var(--light-purple) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+.cover-content {
+  padding: 40px;
+}
+
+.cover-logo {
+  width: 200px;
+  height: auto;
+  margin-bottom: 30px;
+  filter: brightness(0) invert(1);
+}
+
+.cover-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cover-subtitle {
+  font-size: 28px;
+  font-weight: 300;
+  margin-bottom: 20px;
+  opacity: 0.95;
+}
+
+.cover-tagline {
+  font-size: 20px;
+  font-weight: 400;
+  font-style: italic;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+.cover-badges {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid var(--primary-purple);
+}
+
+.page-logo {
+  width: 60px;
+  height: auto;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary-purple);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title i {
+  font-size: 28px;
+}
+
+/* Content Sections */
+.content-section {
+  margin-top: 20px;
+}
+
+.intro-box {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.05),
+    rgba(139, 92, 246, 0.05)
+  );
+  padding: 25px;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary-purple);
+  margin-bottom: 30px;
+}
+
+.intro-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-dark);
+}
+
+.section-intro {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 25px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Two Column Layout */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.feature-card {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.feature-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--secondary-purple)
+  );
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.feature-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+}
+
+.feature-list li {
+  padding: 8px 0;
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.feature-list i {
+  color: var(--primary-purple);
+  margin-top: 3px;
+  font-size: 16px;
+}
+
+.leader-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leader-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.leader-item i {
+  color: var(--primary-purple);
+  font-size: 24px;
+}
+
+.leader-item strong {
+  display: block;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.leader-item span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+/* Mission Box */
+.mission-box {
+  background: linear-gradient(
+    135deg,
+    var(--primary-purple),
+    var(--secondary-purple)
+  );
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.mission-icon {
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.mission-icon i {
+  font-size: 32px;
+}
+
+.mission-box h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.mission-box p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Values Grid */
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.value-card {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.value-card:hover {
+  border-color: var(--primary-purple);
+  transform: translateY(-2px);
+}
+
+.value-card i {
+  font-size: 32px;
+  color: var(--primary-purple);
+  margin-bottom: 12px;
+}
+
+.value-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.value-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Role Cards */
+.role-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: all 0.3s;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.role-card:hover {
+  border-color: var(--primary-purple);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+}
+
+.role-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.05),
+    rgba(139, 92, 246, 0.05)
+  );
+}
+
+.role-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.role-icon.designer {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+}
+
+.role-icon.video {
+  background: linear-gradient(135deg, #8b5cf6, #a855f7);
+}
+
+.role-icon.photo {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+}
+
+.role-icon.event {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.role-icon.community {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+}
+
+.role-icon.speaker {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.role-title-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+.role-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.role-content {
+  padding: 20px;
+}
+
+.role-detail {
+  margin-bottom: 15px;
+}
+
+.role-detail strong {
+  display: block;
+  font-size: 14px;
+  color: var(--primary-purple);
+  margin-bottom: 5px;
+}
+
+.role-detail strong i {
+  margin-right: 5px;
+}
+
+.role-detail p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+.role-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.meta-item {
+  background: var(--bg-light);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-item i {
+  color: var(--primary-purple);
+}
+
+.role-benefits strong {
+  display: block;
+  font-size: 14px;
+  color: var(--secondary-purple);
+  margin-bottom: 5px;
+}
+
+.role-benefits strong i {
+  margin-right: 5px;
+}
+
+.role-benefits p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+/* Benefits Grid */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.benefit-card {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.benefit-card:hover {
+  border-color: var(--primary-purple);
+  transform: translateY(-2px);
+}
+
+.benefit-card i {
+  font-size: 36px;
+  color: var(--primary-purple);
+  margin-bottom: 12px;
+}
+
+.benefit-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.benefit-card p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Stats Section */
+.stats-section {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.05),
+    rgba(139, 92, 246, 0.05)
+  );
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.stats-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-purple);
+  margin-bottom: 25px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid var(--primary-purple);
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--primary-purple);
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Back Cover */
+.back-cover {
+  padding: 0;
+}
+
+.back-cover-gradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--deep-purple) 0%,
+    var(--primary-purple) 50%,
+    var(--secondary-purple) 100%
+  );
+  padding: 40px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.back-cover-content {
+  text-align: center;
+}
+
+.back-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.back-subtitle {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 40px;
+  opacity: 0.95;
+}
+
+.apply-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.step {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 25px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.step h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.step p {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.cta-box {
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: 30px;
+}
+
+.cta-box h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.website-url {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.cta-note {
+  font-size: 14px;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.footer-info {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.footer-info p {
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-size: 16px;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.hashtags {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+/* Print Styles */
+@media print {
+  .no-print,
+  .print-button-container,
+  .print-btn,
+  .print-hint {
+    display: none !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .page {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 20mm;
+    box-shadow: none;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  .cover-page,
+  .back-cover {
+    padding: 0;
+  }
+
+  /* Ensure colors print - CRITICAL FOR VISIBILITY */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Force background colors to print */
+  .cover-gradient,
+  .back-cover-gradient,
+  .role-icon,
+  .step-circle,
+  .mission-box,
+  .badge,
+  .step,
+  .cta-box {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Ensure text is dark and visible */
+  p,
+  li,
+  span,
+  label {
+    color: #1e293b !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #0f172a !important;
+  }
+
+  /* Force gradient backgrounds to show */
+  .cover-gradient {
+    background: linear-gradient(
+      135deg,
+      #6366f1 0%,
+      #8b5cf6 50%,
+      #a855f7 100%
+    ) !important;
+  }
+
+  .back-cover-gradient {
+    background: linear-gradient(
+      135deg,
+      #4f46e5 0%,
+      #6366f1 50%,
+      #8b5cf6 100%
+    ) !important;
+  }
+
+  /* Prevent page breaks inside elements - CRITICAL FOR PHOTOGRAPHER & SPEAKER SECTIONS */
+  .role-card,
+  .value-card,
+  .benefit-card,
+  .feature-card {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: block !important;
+    margin-bottom: 15px !important;
+  }
+
+  /* Ensure images print */
+  img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+}
+
+/* CSS for html2pdf.js - ensures all content is captured */
+.html2pdf__page-break {
+  page-break-before: always;
+}
+
+/* Ensure download button never shows in PDF */
+body.generating-pdf .no-print,
+body.generating-pdf .print-button-container {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}

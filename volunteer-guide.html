@@ -552,9 +552,9 @@
 
         if (confirmed) {
           // User confirmed - save confirmation and unlock form access
-          localStorage.setItem('guideReadConfirmed', 'true');
-          localStorage.setItem('guideReadTimestamp', Date.now());
-          
+          localStorage.setItem("guideReadConfirmed", "true");
+          localStorage.setItem("guideReadTimestamp", Date.now());
+
           // Redirect to application form with unlock parameter
           window.location.href = "index.html?guide=completed#apply";
         } else {

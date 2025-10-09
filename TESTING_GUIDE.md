@@ -3,18 +3,23 @@
 ## How to Test Right Now
 
 ### **Step 1: Clear Your Browser Storage**
+
 Open browser console (F12) and run:
+
 ```javascript
-localStorage.clear()
+localStorage.clear();
 ```
+
 Then refresh the page.
 
 ---
 
 ### **Step 2: Visit Your Site**
+
 Go to: `https://alxclubtech.netlify.app/`
 
 **✅ You Should See:**
+
 - Header section
 - "Before You Apply" section with book icon 📖
 - "Read Volunteer Guide" button
@@ -22,6 +27,7 @@ Go to: `https://alxclubtech.netlify.app/`
 - **NO APPLICATION FORM** (hidden)
 
 **❌ You Should NOT See:**
+
 - Google Form iframe
 - "Application Form" header
 - Any form fields
@@ -29,9 +35,11 @@ Go to: `https://alxclubtech.netlify.app/`
 ---
 
 ### **Step 3: Try to Scroll Down**
+
 Scroll to bottom of page.
 
 **✅ Verify:**
+
 - Form section is completely missing
 - Only the "Read First" message is visible
 - Footer appears after the message
@@ -39,9 +47,11 @@ Scroll to bottom of page.
 ---
 
 ### **Step 4: Click "Read Volunteer Guide"**
+
 Click the button in "Before You Apply" section.
 
 **✅ Verify:**
+
 - New tab opens with `volunteer-guide.html`
 - No button at the TOP of the guide
 - Can read through all 8 pages
@@ -49,18 +59,22 @@ Click the button in "Before You Apply" section.
 ---
 
 ### **Step 5: Read and Scroll to Bottom**
+
 Scroll through all pages until you reach the last page (Back Cover).
 
 **✅ Verify:**
+
 - Button appears AFTER the back cover: "I Have Read the Complete Guide" ✓
 - Clear message: "Click this button to confirm..."
 
 ---
 
 ### **Step 6: Click the Confirmation Button**
+
 Click "I Have Read the Complete Guide"
 
 **✅ Verify:**
+
 - Confirmation dialog appears
 - Shows checklist:
   - ✓ All volunteer roles and responsibilities
@@ -72,9 +86,11 @@ Click "I Have Read the Complete Guide"
 ---
 
 ### **Step 7A: Test Cancel**
+
 First time, click "Cancel"
 
 **✅ Verify:**
+
 - Alert appears: "Please take your time to read..."
 - Stays on guide page
 - Can scroll and re-read
@@ -82,9 +98,11 @@ First time, click "Cancel"
 ---
 
 ### **Step 7B: Test OK**
+
 Click the button again, now click "OK"
 
 **✅ Verify:**
+
 - Redirects to: `index.html?guide=completed#apply`
 - **FORM IS NOW VISIBLE!** ✅
 - Message is HIDDEN
@@ -95,9 +113,11 @@ Click the button again, now click "OK"
 ---
 
 ### **Step 8: Test Persistence**
+
 Close browser completely, reopen, visit site again.
 
 **✅ Verify:**
+
 - Form is STILL visible (localStorage works!)
 - Can access form without reading guide again
 - Persistent access maintained
@@ -109,27 +129,30 @@ Close browser completely, reopen, visit site again.
 Open browser console (F12) and check:
 
 ### **Before Reading Guide:**
+
 ```javascript
-localStorage.getItem('guideReadConfirmed')
+localStorage.getItem("guideReadConfirmed");
 // Should return: null
 ```
 
 ### **After Confirming:**
+
 ```javascript
-localStorage.getItem('guideReadConfirmed')
+localStorage.getItem("guideReadConfirmed");
 // Should return: "true"
 
-localStorage.getItem('guideReadTimestamp')
+localStorage.getItem("guideReadTimestamp");
 // Should return: timestamp number (e.g., "1728468234567")
 ```
 
 ### **Check Form Visibility:**
+
 ```javascript
-document.getElementById('apply').style.display
+document.getElementById("apply").style.display;
 // Before reading: "none"
 // After reading: "block"
 
-document.getElementById('readFirstMessage').style.display
+document.getElementById("readFirstMessage").style.display;
 // Before reading: "block"
 // After reading: "none"
 ```
@@ -157,22 +180,27 @@ All these must be TRUE:
 ## 🚨 Common Issues
 
 ### **Issue 1: Form visible immediately**
+
 **Cause:** localStorage already set from previous test
-**Fix:** 
+**Fix:**
+
 ```javascript
-localStorage.clear()
-location.reload()
+localStorage.clear();
+location.reload();
 ```
 
 ### **Issue 2: Button not appearing at bottom**
+
 **Cause:** Cached old version
 **Fix:** Hard refresh (Ctrl + Shift + R or Cmd + Shift + R)
 
 ### **Issue 3: No redirect after confirmation**
+
 **Cause:** JavaScript error
 **Fix:** Check console for errors, verify `index.html` script is present
 
 ### **Issue 4: Form not showing after redirect**
+
 **Cause:** JavaScript not detecting URL parameter
 **Fix:** Verify URL includes `?guide=completed#apply`
 
@@ -195,6 +223,7 @@ Test on mobile device:
 ## 🎉 Expected Final Result
 
 **Perfect User Flow:**
+
 1. User visits site → Form hidden ❌
 2. User reads guide → Understands roles 📚
 3. User confirms → Gets access ✅

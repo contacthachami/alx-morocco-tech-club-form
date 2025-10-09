@@ -408,8 +408,8 @@
       </div>
     </div>
 
-    <!-- Why Volunteer Page -->
-    <div class="page">
+    <!-- Why Volunteer Page - Trigger point for button visibility -->
+    <div class="page" id="whyVolunteerPage">
       <div class="page-header">
         <img src="images/logo_black.png" alt="ALX Logo" class="page-logo" />
         <div class="page-header-text">
@@ -523,10 +523,17 @@
       </div>
     </div>
 
-    <!-- Confirmation Button - After Reading All Pages -->
+    <!-- Confirmation Button - Hidden until "Why Volunteer" page is reached -->
     <div
       class="print-button-container no-print"
-      style="margin-top: 30px; margin-bottom: 50px"
+      id="confirmationButton"
+      style="
+        margin-top: 30px;
+        margin-bottom: 50px;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+      "
     >
       <button onclick="confirmReading()" class="finish-reading-btn">
         <i class="fas fa-check-circle"></i> I Have Read the Complete Guide
@@ -588,6 +595,46 @@
       window.addEventListener("load", function () {
         console.log("✓ All content and images loaded successfully");
         console.log("✓ Please read all sections carefully before applying");
+      });
+
+      // Smart Button Visibility - Show only when "Why Volunteer" page is reached
+      document.addEventListener("DOMContentLoaded", function () {
+        const whyVolunteerPage = document.getElementById("whyVolunteerPage");
+        const confirmationButton =
+          document.getElementById("confirmationButton");
+
+        if (!whyVolunteerPage || !confirmationButton) {
+          console.error("⚠️ Button visibility elements not found");
+          return;
+        }
+
+        // Create Intersection Observer to detect when "Why Volunteer" page is visible
+        const observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                // Page 6 is now visible - show button with fade-in
+                confirmationButton.style.display = "block";
+                setTimeout(function () {
+                  confirmationButton.style.opacity = "1";
+                }, 50);
+                console.log(
+                  "✓ You've reached 'Why Volunteer With Us?' - Button now visible!"
+                );
+              }
+            });
+          },
+          {
+            threshold: 0.3, // Trigger when 30% of page is visible
+            rootMargin: "0px",
+          }
+        );
+
+        // Start observing the "Why Volunteer" page
+        observer.observe(whyVolunteerPage);
+        console.log(
+          "✓ Smart button visibility activated - scroll to 'Why Volunteer With Us?' to see button"
+        );
       });
     </script>
   </body>

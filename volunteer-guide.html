@@ -551,8 +551,12 @@
         );
 
         if (confirmed) {
-          // User confirmed - redirect to application form
-          window.location.href = "index.html#apply";
+          // User confirmed - save confirmation and unlock form access
+          localStorage.setItem('guideReadConfirmed', 'true');
+          localStorage.setItem('guideReadTimestamp', Date.now());
+          
+          // Redirect to application form with unlock parameter
+          window.location.href = "index.html?guide=completed#apply";
         } else {
           // User not ready yet
           alert(

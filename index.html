@@ -103,8 +103,8 @@
         </div>
       </section>
 
-      <!-- Form Section -->
-      <section class="form-section">
+      <!-- Form Section (Hidden by default until guide is read) -->
+      <section class="form-section" id="apply" style="display: none;">
         <div class="form-container">
           <div class="form-header">
             <i class="fas fa-edit"></i>
@@ -127,6 +127,42 @@
               Loading…
             </iframe>
           </div>
+        </div>
+      </section>
+
+      <!-- Message to read guide first (shown when form is hidden) -->
+      <section class="read-first-message" id="readFirstMessage" style="display: none;">
+        <div class="message-container">
+          <div class="message-icon">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h2>Please Read the Volunteer Guide First</h2>
+          <p>
+            Before applying, you must read our comprehensive volunteer guide to understand
+            all available roles, responsibilities, and benefits.
+          </p>
+          <div class="message-steps">
+            <div class="message-step">
+              <i class="fas fa-check-circle"></i>
+              <p>Click "Read Volunteer Guide" above</p>
+            </div>
+            <div class="message-step">
+              <i class="fas fa-check-circle"></i>
+              <p>Read all 8 pages carefully</p>
+            </div>
+            <div class="message-step">
+              <i class="fas fa-check-circle"></i>
+              <p>Confirm you've read everything</p>
+            </div>
+            <div class="message-step">
+              <i class="fas fa-check-circle"></i>
+              <p>Return here to access the application form</p>
+            </div>
+          </div>
+          <a href="volunteer-guide.html" target="_blank" class="message-btn">
+            <i class="fas fa-book-reader"></i>
+            Read the Guide Now
+          </a>
         </div>
       </section>
 
@@ -154,5 +190,34 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+      // Form Access Control - Only show form after reading guide
+      document.addEventListener('DOMContentLoaded', function() {
+        const formSection = document.getElementById('apply');
+        const readFirstMessage = document.getElementById('readFirstMessage');
+        
+        // Check if user has read the guide
+        const guideRead = localStorage.getItem('guideReadConfirmed');
+        const urlParams = new URLSearchParams(window.location.search);
+        const guideCompleted = urlParams.get('guide') === 'completed';
+        
+        if (guideRead === 'true' || guideCompleted) {
+          // User has read the guide - show form
+          formSection.style.display = 'block';
+          readFirstMessage.style.display = 'none';
+          
+          // Scroll to form if coming from guide
+          if (guideCompleted && window.location.hash === '#apply') {
+            setTimeout(() => {
+              formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+          }
+        } else {
+          // User hasn't read the guide - hide form and show message
+          formSection.style.display = 'none';
+          readFirstMessage.style.display = 'block';
+        }
+      });
+    </script>
   </body>
 </html>
